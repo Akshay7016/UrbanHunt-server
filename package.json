@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "ninja": "console-ninja nodemon index.js"
+    "ninja": "console-ninja node --watch index.js"
   },
   "keywords": [],
   "author": "",
