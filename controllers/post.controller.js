@@ -35,6 +35,11 @@ export const getPost = async (req, res) => {
         postDetail: true,
       },
     });
+
+    if (post === null) {
+      return res.status(500).json({ message: "Failed to get post!" });
+    }
+
     return res.status(200).json(post);
   } catch (error) {
     return res.status(500).json({ message: "Failed to get post!" });
