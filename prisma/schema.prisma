@@ -58,6 +58,17 @@ model PostDetail {
   postId     String  @unique @db.ObjectId
 }
 
+model SavedPost {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  post     Post     @relation(fields: [postId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  postId   String   @db.ObjectId
+  userId   String   @db.ObjectId
+  createAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
 enum Type {
   buy
   rent
@@ -68,15 +79,4 @@ enum Property {
   house
   condo
   land
-}
-
-model SavedPost {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  post     Post     @relation(fields: [postId], references: [id])
-  user     User     @relation(fields: [userId], references: [id])
-  postId   String   @db.ObjectId
-  userId   String   @db.ObjectId
-  createAt DateTime @default(now())
-
-  @@unique([userId, postId])
 }
