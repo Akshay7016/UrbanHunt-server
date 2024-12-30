@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 import { prisma } from "../lib/prisma.js";
 
 export const getPosts = async (req, res) => {
@@ -40,7 +42,36 @@ export const getPost = async (req, res) => {
       return res.status(500).json({ message: "Failed to get post!" });
     }
 
-    return res.status(200).json(post);
+    let saved = null;
+    const token = req?.cookies?.token;
+
+    if (token) {
+      try {
+        // The jwt.verify method is now wrapped in a Promise so that it can be awaited. This ensures that the verification is complete before moving forward.
+        const payload = await new Promise((resolve, reject) => {
+          jwt.verify(token, process.env.JWT_SECRET_KEY, (err, payload) => {
+            if (err) {
+              reject("Token is not valid");
+            } else {
+              resolve(payload);
+            }
+          });
+        });
+
+        saved = await prisma.savedPost.findUnique({
+          where: {
+            userId_postId: {
+              userId: payload.id,
+              postId: id,
+            },
+          },
+        });
+      } catch (error) {
+        return res.status(403).json({ message: err });
+      }
+    }
+
+    return res.status(200).json({ ...post, isSaved: saved ? true : false });
   } catch (error) {
     return res.status(500).json({ message: "Failed to get post!" });
   }
