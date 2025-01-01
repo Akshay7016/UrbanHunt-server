@@ -95,7 +95,7 @@ export const readChat = async (req, res) => {
       },
       data: {
         seenBy: {
-          set: [tokenUserId],
+          push: tokenUserId,
         },
       },
     });
