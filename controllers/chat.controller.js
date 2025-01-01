@@ -39,16 +39,11 @@ export const getChat = async (req, res) => {
   const tokenUserId = req.userId;
 
   try {
-    const chat = await prisma.chat.update({
+    const chat = await prisma.chat.findUnique({
       where: {
         id: chatId,
         userIDs: {
           hasSome: [tokenUserId],
-        },
-      },
-      data: {
-        seenBy: {
-          push: tokenUserId,
         },
       },
       include: {
@@ -56,6 +51,17 @@ export const getChat = async (req, res) => {
           orderBy: {
             createdAt: "asc",
           },
+        },
+      },
+    });
+
+    await prisma.chat.update({
+      where: {
+        id: chatId,
+      },
+      data: {
+        seenBy: {
+          push: tokenUserId,
         },
       },
     });
