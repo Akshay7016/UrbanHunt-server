@@ -111,3 +111,24 @@ export const readChat = async (req, res) => {
     return res.status(500).json({ message: "Failed to read chat!" });
   }
 };
+
+export const verifyChat = async (req, res) => {
+  const tokenUserId = req.userId;
+  const receiverId = req.body.receiverId;
+
+  try {
+    const chat = await prisma.chat.findFirst({
+      where: {
+        userIDs: {
+          hasEvery: [tokenUserId, receiverId],
+        },
+      },
+    });
+
+    return res.status(200).json(chat);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Failed to verify chat between users!" });
+  }
+};
