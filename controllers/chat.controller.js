@@ -61,7 +61,7 @@ export const getChat = async (req, res) => {
       },
       data: {
         seenBy: {
-          push: tokenUserId,
+          push: [tokenUserId],
         },
       },
     });
@@ -101,7 +101,7 @@ export const readChat = async (req, res) => {
       },
       data: {
         seenBy: {
-          push: tokenUserId,
+          set: [tokenUserId],
         },
       },
     });
