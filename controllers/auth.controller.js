@@ -57,9 +57,8 @@ export const login = async (req, res) => {
 
     delete user.password;
 
-    // TODO: add secure:true in 3rd arg object in production mode
     return res
-      .cookie("token", token, { httpOnly: true, maxAge: age })
+      .cookie("token", token, { httpOnly: true, maxAge: age, secure: true })
       .status(200)
       .json(user);
   } catch (error) {
