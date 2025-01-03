@@ -92,7 +92,6 @@ export const addPost = async (req, res) => {
     });
     return res.status(200).json(newPost);
   } catch (error) {
-    console.log(error.message);
     return res.status(500).json({ message: "Failed to add post!" });
   }
 };
