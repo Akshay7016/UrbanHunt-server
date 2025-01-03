@@ -55,12 +55,16 @@ export const login = async (req, res) => {
       }
     );
 
-    console.log("Token", token);
-
     delete user.password;
 
+    const isProduction = process.env.NODE_ENV === "Production";
+
     return res
-      .cookie("token", token, { httpOnly: true, maxAge: age, secure: true })
+      .cookie("token", token, {
+        httpOnly: true,
+        maxAge: age,
+        secure: isProduction,
+      })
       .status(200)
       .json(user);
   } catch (error) {
